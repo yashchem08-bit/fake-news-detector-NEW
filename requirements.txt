@@ -1,0 +1,23 @@
+# ── Member A: Data processing ─────────────────────────────
+pandas
+numpy
+nltk
+scikit-learn
+
+# ── Member B: ML (baseline) ───────────────────────────────
+joblib
+
+# ── Member B: ML (optional transformer upgrade, Phase 2) ──
+# Uncomment these two if you run model/train_transformer.py
+# transformers
+# torch
+
+# ── Member C: Backend API ─────────────────────────────────
+fastapi
+uvicorn[standard]
+pydantic
+requests
+beautifulsoup4
+
+# ── Member D: Frontend ─────────────────────────────────────
+# No Python deps — plain HTML/CSS/JS, no build step required.
