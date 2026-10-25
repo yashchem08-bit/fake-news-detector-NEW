@@ -1,0 +1,3 @@
+Those files are very large in size so git doesn't allow us to upload greater than 25 MB file so when you run model for training at that time raw data will automatically
+converted into processed file then you can run your model.
+// Not available FILE
