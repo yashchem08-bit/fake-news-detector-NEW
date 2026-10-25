@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Wire Check — Fake News Verification Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+  rel="stylesheet"
+/>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="desk">
+
+    <header class="masthead">
+      <p class="kicker">PRESS VERIFICATION DESK</p>
+      <h1>The Wire Check</h1>
+      <p class="subhead">Paste an article, or a link to one, and we'll run it past the detector for a verdict.</p>
+    </header>
+
+    <hr class="rule" />
+
+    <main class="deskcard">
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-mode="text" role="tab" aria-selected="true" type="button">Paste Text</button>
+        <button class="tab" data-mode="url" role="tab" aria-selected="false" type="button">Paste Link</button>
+      </div>
+
+      <textarea id="text-input" placeholder="Paste the full article text here…" aria-label="Article text"></textarea>
+      <input id="url-input" type="url" placeholder="https://example.com/news/article" aria-label="Article URL" style="display:none;" />
+
+      <div class="actions">
+        <button id="submit-btn" class="stamp-btn" type="button">
+          <span class="btn-label">RUN VERIFICATION</span>
+          <span class="btn-spinner" hidden></span>
+        </button>
+        <span id="char-count" class="char-count">0 characters</span>
+      </div>
+
+      <p id="error-msg" class="error-msg" role="alert" hidden></p>
+    </main>
+
+    <section id="result" class="result-card" hidden aria-live="polite">
+      <div class="stamp-wrap">
+        <div id="stamp" class="stamp"></div>
+      </div>
+
+      <div class="gauge-wrap">
+        <svg id="gauge" viewBox="0 0 200 115" class="gauge" aria-hidden="true">
+          <path d="M10,100 A90,90 0 0,1 100,10" class="gauge-half gauge-fake-half" />
+          <path d="M100,10 A90,90 0 0,1 190,100" class="gauge-half gauge-real-half" />
+          <line id="needle" x1="100" y1="100" x2="100" y2="25" class="needle" />
+          <circle cx="100" cy="100" r="7" class="needle-hub" />
+        </svg>
+        <div class="gauge-labels">
+          <span class="gauge-label fake">FAKE</span>
+          <span class="gauge-label real">REAL</span>
+        </div>
+      </div>
+
+      <div class="ticker">
+        <p id="ticker-confidence">CONFIDENCE — 00.0%</p>
+        <p id="ticker-meta">MODEL — baseline · PROCESSED IN 0.00s</p>
+      </div>
+    </section>
+
+    <footer class="fine-print">
+      <p>This is a machine-learning estimate, not a fact-check. Always verify against primary sources.</p>
+    </footer>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
