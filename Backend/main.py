@@ -26,8 +26,8 @@ from pydantic import BaseModel, field_validator
 # project root even when this file is run directly.
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from model.predict import predict_news
-from data_processing.scrape_url import fetch_article_text
+from Model.predict import predict_news
+from Data_processing.scrape_url import fetch_article_text
 
 app = FastAPI(
     title="Fake News Detector API",
