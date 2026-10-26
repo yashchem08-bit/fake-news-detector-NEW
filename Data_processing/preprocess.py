@@ -36,7 +36,7 @@ Output:
 Run:
     python data_processing/preprocess.py
 """
-
+import glob
 import os
 import re
 import string
@@ -137,7 +137,7 @@ def load_liar() -> pd.DataFrame:
 
 def load_raw_data() -> pd.DataFrame:
     print("Loading available datasets from data/raw/ ...")
-    parts = [load_isot(), load_welfake(), load_liar()]
+    parts = [load_isot(), load_welfake(), load_liar(), load_textdb3(), load_aadya()]
     parts = [p for p in parts if len(p) > 0]
 
     if not parts:
@@ -152,6 +152,41 @@ def load_raw_data() -> pd.DataFrame:
     print(f"Label balance —\n{df['label'].value_counts().rename({0: 'real', 1: 'fake'})}")
     return df
 
+def load_textdb3() -> pd.DataFrame:
+    path = os.path.join(RAW_DIR, "textdb3", "fake_or_real_news.csv")
+    if not os.path.exists(path):
+        return pd.DataFrame(columns=["content", "label"])
+    df = pd.read_csv(path, on_bad_lines="skip")
+    df["label"] = df["label"].str.upper().map({"FAKE": 1, "REAL": 0})
+    df["content"] = df["title"].fillna("") + ". " + df["text"].fillna("")
+    df = df[["content", "label"]].dropna()
+    print(f"  textdb3:         {len(df):>6} rows")
+    return df
+
+
+def load_aadya() -> pd.DataFrame:
+    files = glob.glob(os.path.join(RAW_DIR, "aadya", "*.csv"))
+    frames = []
+    for f in files:
+        try:
+            d = pd.read_csv(f, on_bad_lines="skip")
+        except Exception as e:
+            print(f"  skipping {os.path.basename(f)}: {e}")
+            continue
+        if {"title", "text", "label"} <= set(d.columns):
+            frames.append(d)
+        else:
+            print(f"  skipping {os.path.basename(f)}: columns are {list(d.columns)}")
+
+    if not frames:
+        return pd.DataFrame(columns=["content", "label"])
+
+    df = pd.concat(frames, ignore_index=True)
+    df["label"] = 1 - df["label"].astype(int)      # their 0=fake, 1=true -> flip
+    df["content"] = df["title"].fillna("") + ". " + df["text"].fillna("")
+    df = df[["content", "label"]].dropna()
+    print(f"  aadya:           {len(df):>6} rows")
+    return df
 
 def clean_text(text: str, stop_words: set) -> str:
     text = text.lower()
